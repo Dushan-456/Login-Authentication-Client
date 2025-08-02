@@ -7,15 +7,28 @@ import {
    FormHelperText,
    Button,
 } from "@mui/material";
-import TextField from "@mui/material/TextField";
+import {
+   Dialog,
+   DialogTitle,
+   DialogContent,
+   DialogActions,
+   TextField,
+   Box,
+   Alert,
+   Stack,
+} from "@mui/material";
 import { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import API from "../assets/api";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const Register = () => {
    const [showPassword, setShowPassword] = useState(false);
+   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+   const [serverError, setServerError] = useState("");
 
    const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -37,8 +50,33 @@ const Register = () => {
 
    const submitCall = (data) => {
       console.log(data);
+      sendRequest(data);
    };
    const password = watch("password"); // Watch original password
+
+   //---------------------------------------------------------------------------------------
+
+   const sendRequest = async (data) => {
+      try {
+         const res = await API.post("/user/register-user", data);
+
+         console.log("User added:", res.data);
+         setSuccessDialogOpen(true);
+      } catch (error) {
+         console.error(
+            "Error adding user:",
+            error.response?.data || error.message
+         );
+         setServerError(
+            typeof error.response?.data?.error === "object"
+               ? error.response.data.error
+               : {
+                    general:
+                       error.response?.data?.error || "Something went wrong",
+                 }
+         );
+      }
+   };
 
    return (
       <div className="flex bg-gray-500 items-center justify-center h-screen">
@@ -46,6 +84,15 @@ const Register = () => {
             <div className="w-sm flex flex-col p-5 gap-5 bg-white  rounded-2xl ">
                <h1 className="text-4xl font-bold text-center">
                   Create an Account
+                  {serverError && typeof serverError === "object" && (
+                     <Stack sx={{ width: "100%" }} spacing={2}>
+                        {Object.entries(serverError).map(([field, message]) => (
+                           <Alert severity="error" key={field}>
+                              {message}
+                           </Alert>
+                        ))}
+                     </Stack>
+                  )}
                </h1>
                <TextField
                   className="w-full"
@@ -205,6 +252,54 @@ const Register = () => {
                </p>
             </div>
          </form>
+         <Dialog
+            open={successDialogOpen}
+            onClose={() => {
+               setSuccessDialogOpen(false);
+            }}>
+            {/* Centered Icon */}
+            <Box
+               sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  mt: 2,
+               }}>
+               <CheckCircleIcon
+                  sx={{
+                     width: 50,
+                     height: 50,
+                     color: "#02ab32",
+                  }}
+               />
+            </Box>
+
+            <DialogTitle sx={{ textAlign: "center" }}>
+               User Registered
+            </DialogTitle>
+
+            <DialogContent
+               sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  textAlign: "center",
+                  px: 4,
+               }}>
+               <p>The user has been registered successfully!</p>
+            </DialogContent>
+
+            <DialogActions sx={{ justifyContent: "center", pb: 2 }}>
+               <Button
+                  onClick={() => {
+                     setSuccessDialogOpen(false);
+                  }}
+                  autoFocus
+                  variant="contained">
+                  OK
+               </Button>
+            </DialogActions>
+         </Dialog>
       </div>
    );
 };
