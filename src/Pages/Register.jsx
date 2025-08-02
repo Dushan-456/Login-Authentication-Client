@@ -33,7 +33,7 @@ const Register = () => {
             <TextField
                className="w-full"
                // error
-               label="UserName"
+               label="Username"
                //  helperText="Incorrect entry."
             />
             <TextField
