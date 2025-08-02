@@ -33,28 +33,24 @@ const Register = () => {
             <TextField
                className="w-full"
                // error
-               id="outlined-error-helper-text"
                label="UserName"
                //  helperText="Incorrect entry."
             />
             <TextField
                className="w-full"
                // error
-               id="outlined-error-helper-text"
                label="Email"
                //  helperText="Incorrect entry."
             />
             <TextField
                className="w-full"
                // error
-               id="outlined-error-helper-text"
                label="Mobile"
                //  helperText="Incorrect entry."
             />
             <TextField
                className="w-full"
                // error
-               id="outlined-error-helper-text"
                label="Role"
                //  helperText="Incorrect entry."
             />
@@ -85,11 +81,11 @@ const Register = () => {
                {/* <FormHelperText>Incorrect entry.</FormHelperText> */}
             </FormControl>
             <FormControl sx={{ width: "100%" }} variant="outlined">
-               <InputLabel htmlFor="outlined-adornment-password">
+               <InputLabel htmlFor="outlined-adornment-password1">
                  Conform Password
                </InputLabel>
                <OutlinedInput
-                  id="outlined-adornment-password"
+                  id="outlined-adornment-password1"
                   type={showPassword ? "text" : "password"}
                   endAdornment={
                      <InputAdornment position="end">
