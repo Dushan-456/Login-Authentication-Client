@@ -56,7 +56,7 @@ const Login = () => {
 
    const sendRequest = async (data) => {
       try {
-          const res = await API.post("/user/login", data);
+          const res = await API.post("/user/login", data ,{withCredentials:true});
           console.log("User Logged In:", res.data);
          setSuccessDialogOpen(true);
          setServerError("");
@@ -80,7 +80,7 @@ const Login = () => {
    return (
       <div className="flex bg-gray-500 items-center justify-center h-screen">
          <form onSubmit={handleSubmit(submitCall)}>
-            <div className="w-sm flex flex-col p-5 gap-5 bg-white h-96 rounded-2xl ">
+            <div className="w-sm flex flex-col p-5 gap-5 bg-white  rounded-2xl ">
                <h1 className="text-4xl font-bold text-center">Login</h1>
                {serverError && typeof serverError === "object" && (
                   <Stack sx={{ width: "100%" }} spacing={2}>
@@ -197,7 +197,7 @@ const Login = () => {
                <Button
                   onClick={() => {
                      setSuccessDialogOpen(false);
-                     navigate("/profile");
+                    //  navigate("/profile");
                   }}
                   autoFocus
                   variant="contained">
