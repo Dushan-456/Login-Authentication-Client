@@ -20,7 +20,7 @@ import {
 import { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import API from "../assets/api";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -29,6 +29,7 @@ const Register = () => {
    const [showPassword, setShowPassword] = useState(false);
    const [successDialogOpen, setSuccessDialogOpen] = useState(false);
    const [serverError, setServerError] = useState("");
+   const navigate = useNavigate();
 
    const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -52,7 +53,7 @@ const Register = () => {
       console.log(data);
       sendRequest(data);
    };
-   const password = watch("password"); // Watch original password
+   const password = watch("password");
 
    //---------------------------------------------------------------------------------------
 
@@ -60,13 +61,15 @@ const Register = () => {
       try {
          const res = await API.post("/user/register-user", data);
 
-         console.log("User added:", res.data);
+         console.log("User Registered:", res.data);
          setSuccessDialogOpen(true);
+         setServerError("");
       } catch (error) {
          console.error(
-            "Error adding user:",
+            "Error registering user:",
             error.response?.data || error.message
          );
+
          setServerError(
             typeof error.response?.data?.error === "object"
                ? error.response.data.error
@@ -293,6 +296,7 @@ const Register = () => {
                <Button
                   onClick={() => {
                      setSuccessDialogOpen(false);
+                     navigate("/");
                   }}
                   autoFocus
                   variant="contained">
